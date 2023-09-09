@@ -68,8 +68,16 @@ class UniqueConstraint extends BaseConstraint
             }
             if ($containerNode != null && $level == 2) {
                 // collect (additional) key fields
-                $keyFields = array($nodeName);
+                $keyFields = [$nodeName];
                 $keyFields = array_unique(array_merge($keyFields, $this->getOptionValueList('addFields')));
+                // remove fields if regex was specified matching on constraint anchor value
+                foreach ($keyFields as $tag => $regex) {
+                    if (preg_match('/(.*)_regex/', $tag, $matches)) {
+                        if (isset($keyFields[$matches[1]]) && !preg_match($regex, (string)$parentNode->{$keyFields[0]})) {
+                            unset($keyFields[$matches[1]]);
+                        }
+                    }
+                }
                 // calculate the key for this node
                 $nodeKey = '';
                 foreach ($keyFields as $field) {

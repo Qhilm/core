@@ -25,6 +25,10 @@
                     <check001>
                         <ValidationMessage>Address already assigned.</ValidationMessage>
                         <type>UniqueConstraint</type>
+                        <addFields>
+                            <field1_regex>/^fe[89ab][0-9a-f]:/i</field1_regex>
+                            <field1>interface</field1>
+                        </addFields>
                     </check001>
                 </Constraints>
             </subnet>
